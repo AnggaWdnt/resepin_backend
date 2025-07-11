@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Recipe extends Model
+class Food extends Model
 {
     use HasFactory;
+
+    protected $table = 'foods';
 
     protected $fillable = [
         'name',
         'description',
-        'photo',
         'calories',
         'category_id'
     ];
@@ -21,4 +22,10 @@ class Recipe extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function dailyLogs()
+    {
+        return $this->hasMany(DailyLog::class);
+    }
 }
+

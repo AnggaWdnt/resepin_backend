@@ -9,20 +9,15 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'type',
-    ];
+    protected $fillable = ['name'];
 
-    // Relasi: Banyak kategori bisa dimiliki oleh banyak resep (Many-to-Many)
-    public function recipes()
+    public function foods()
     {
-        return $this->belongsToMany(Recipe::class, 'recipe_categories');
+        return $this->hasMany(Food::class);
     }
 
-    // Relasi: Satu kategori bisa dimiliki oleh banyak food logs
-    public function foodLogs()
+    public function recipes()
     {
-        return $this->hasMany(FoodLog::class);
+        return $this->hasMany(Recipe::class);
     }
 }
