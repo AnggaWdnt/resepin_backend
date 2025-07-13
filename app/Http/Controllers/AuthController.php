@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     /**
-     * Register a new user
+     * ✅ Register a new user
      */
     public function register(Request $request)
     {
@@ -26,15 +26,24 @@ class AuthController extends Controller
             'password' => bcrypt($validated['password'])
         ]);
 
+        // 🔥 Create token langsung setelah register
+        $token = $user->createToken('api_token')->plainTextToken;
+
         return response()->json([
-            'status'  => 'success',
-            'message' => 'User registered successfully',
-            'user'    => $user
+            'status'       => 'success',
+            'message'      => 'User registered successfully',
+            'access_token' => $token,
+            'token_type'   => 'Bearer',
+            'user'         => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+            ]
         ], 201);
     }
 
     /**
-     * Login user and create token
+     * ✅ Login user and issue API Token
      */
     public function login(Request $request)
     {
@@ -52,38 +61,48 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // 🔥 Hapus token lama sebelum membuat yang baru
+        $user->tokens()->delete();
+        $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json([
             'status'       => 'success',
             'message'      => 'Login berhasil',
             'access_token' => $token,
             'token_type'   => 'Bearer',
-            'user'         => $user
-        ], 200);
+            'user'         => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+            ]
+        ]);
     }
 
     /**
-     * Get authenticated user
+     * ✅ Get authenticated user
      */
     public function user(Request $request)
     {
         return response()->json([
             'status' => 'success',
-            'user'   => $request->user()
-        ], 200);
+            'user'   => [
+                'id'    => $request->user()->id,
+                'name'  => $request->user()->name,
+                'email' => $request->user()->email,
+            ]
+        ]);
     }
 
     /**
-     * Logout user (revoke token)
+     * ✅ Logout user (revoke token)
      */
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->tokens()->delete();
 
         return response()->json([
             'status'  => 'success',
             'message' => 'Logout berhasil'
-        ], 200);
+        ]);
     }
 }

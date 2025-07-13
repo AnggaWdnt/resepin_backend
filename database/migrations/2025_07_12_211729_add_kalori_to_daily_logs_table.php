@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('daily_logs', function (Blueprint $table) {
-            $table->string('food_name')->after('id');
-            $table->dropForeign(['food_id']);
-            $table->dropColumn('food_id');
-        });
-        
+{
+    Schema::table('daily_logs', function (Blueprint $table) {
+        $table->integer('kalori')->default(0);
+    });
+}
+
     }
 
     /**

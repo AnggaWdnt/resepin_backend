@@ -9,16 +9,23 @@ class Recipe extends Model
 {
     use HasFactory;
 
+    protected $table = 'recipes';
+
     protected $fillable = [
-        'name',
-        'description',
-        'photo',
-        'calories',
-        'category_id'
+        'judul',
+        'deskripsi',
+        'bahan',
+        'langkah_langkah',
+        'user_id',
     ];
 
-    public function category()
+    protected $casts = [
+        'bahan' => 'array',
+        'langkah_langkah' => 'array',
+    ];
+
+    public function user()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(User::class);
     }
 }

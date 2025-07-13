@@ -9,13 +9,21 @@ class DailyLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['food_name', 'portion', 'date'];
-
+    protected $fillable = [
+        'user_id',
+        'food_id',    
+        'food_name',   
+        'portion',
+        'kalori',
+        'photo',
+        'date'
+    ];
 
     public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+{
+    return $this->belongsTo(User::class);
+}
+
 
     public function food()
     {

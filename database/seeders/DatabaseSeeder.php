@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategorySeeder::class,
             FoodSeeder::class,
+            RecipeSeeder::class,
         ]);
 
         // (Opsional) User dummy untuk testing login API

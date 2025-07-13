@@ -15,17 +15,18 @@ class Food extends Model
         'name',
         'description',
         'calories',
-        'category_id'
+        'category_id',
     ];
 
+    // Relasi ke Category
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    // Relasi ke DailyLog
     public function dailyLogs()
     {
         return $this->hasMany(DailyLog::class);
     }
 }
-
